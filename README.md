@@ -1,4 +1,4 @@
-# Jogo de Adivinhação - Código Secreto
+# Jogo de Adivinhação - Code Riddle
 
 ## 1. Membros da Equipe
 - Ravi Barbosa - [@ravibarbosals](https://github.com/ravibarbosals)
@@ -12,3 +12,45 @@ Programação Imperativa e Funcional - 2025.1
 
 ## 3. Instituição de Ensino
 CESAR School
+
+## 4. Nome do jogo
+**Code Riddle**
+
+## 5. Instruções para compilar e executar
+
+## 6. Descrição do jogo
+**Code Riddle** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado.
+
+## 🎮 Regras do Jogo:
+O jogo possui 3 fases, com níveis de dificuldade crescentes.
+
+Em cada fase, um número é gerado aleatoriamente:
+
+Fase 1: entre 1 e 100
+
+Fase 2: entre 1 e 500
+
+Fase 3: entre 1 e 1000
+
+O jogador recebe enigmas como pista.
+
+A partir dos enigmas, ele tem 7 tentativas para adivinhar o número.
+
+Na Fase 3, se o jogador errar 7 vezes, o número secreto muda automaticamente.
+
+## 🧠 Exemplos de Enigmas:
+Os enigmas ainda estão sendo pensados, pois estamos pensando em usar assuntos da materia de lógica para programação, mas se não formos implementar essa ideia o padrão dos enigmas seriam esses:
+
+"A soma dos dígitos é 15."
+
+"O número é múltiplo de 7."
+
+"Está entre os quadrados de 30 e 35."
+
+
+## 🚧 Em desenvolvimento:
+Integração com a biblioteca CLI-lib para uma interface mais dinâmica no terminal.
+
+Sistema de pontuação e tempo.
+
+Possibilidade de reiniciar a fase.
