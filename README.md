@@ -1,4 +1,4 @@
-# Jogo de Adivinhação - Code Riddle
+# Jogo de Adivinhação - CODE RIDDLER
 
 ## 1. Membros da Equipe
 - Ravi Barbosa - [@ravibarbosals](https://github.com/ravibarbosals)
@@ -14,12 +14,38 @@ Programação Imperativa e Funcional - 2025.1
 CESAR School
 
 ## 4. Nome do jogo
-**Code Riddle**
+**CODE RIDDLER**
 
 ## 5. Instruções para compilar e executar
 
+✅ Pré-requisitos
+Compilador C instalado (ex: GCC via MinGW no Windows)
+
+A biblioteca CLI-lib colocada corretamente:
+
+Arquivos .h da biblioteca devem estar em include/
+
+Arquivos .c da biblioteca devem estar em src/
+
+🛠️ Compilação
+No terminal, dentro da raiz do projeto, execute:
+
+**gcc ./src/*.c -I./include -o coderiddler**
+
+Isso compila todos os arquivos .c da pasta src/ e usa os cabeçalhos da pasta include/.
+O executável coderiddler será gerado na raiz do projeto.
+
+▶️ Execução
+No terminal (após compilar), rode:
+
+**./coderiddler**
+
+No Windows, você pode executar com:
+
+**coderiddler.exe**
+
 ## 6. Descrição do jogo
-**Code Riddle** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral.
+**CODE RIDDLER** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral.
 
 ## 🎮 Regras do Jogo:
 O jogo possui 3 fases, com níveis de dificuldade crescentes.
