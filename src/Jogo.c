@@ -1,5 +1,9 @@
-#include <stdio.h>
+#include <string.h>
+#include "screen.h"
+#include "keyboard.h"
+#include "timer.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 
 typedef struct {
@@ -22,7 +26,7 @@ void mostrarEnigma(int numero) {
     }
 
     if (numero % 5 == 0) {
-        printf(" RIDDLE: Dança no ritmo das mãos... conte nos dedos e vai adivinhar...\n");
+        printf(" RIDDLE: Danca no ritmo das mãos... conte nos dedos e vai adivinhar...\n");
     }
 
     if (numero > 50) {
@@ -35,9 +39,7 @@ void mostrarEnigma(int numero) {
 void jogarFase(Jogo *jogo) {
     int chute;
 
-    system("cls");
     printf("=== CodeBreaker: Fase 1 ===\n");
-
     mostrarEnigma(jogo->numeroSecreto);
 
     for (int i = 1; i <= jogo->tentativas; i++) {
@@ -62,15 +64,35 @@ void jogarFase(Jogo *jogo) {
 }
 
 int main() {
+    static int ch = 0;
+
     srand(time(NULL));
+
+    screenInit(1);
+    keyboardInit();
+    timerInit(50);
+    screenUpdate();
 
     Jogo *fase1 = (Jogo *) malloc(sizeof(Jogo));
     fase1->fase = 1;
     fase1->numeroSecreto = gerarNumero(100);
     fase1->tentativas = 7;
 
-    jogarFase(fase1);
+    while (ch != 10) {
+        if (keyhit()) {
+            ch = readch();
+            jogarFase(fase1);
+            screenUpdate();
+        }
 
-    free(fase1); 
+        if (timerTimeOver() == 1) {
+            screenUpdate();
+        }
+    }
+
+    keyboardDestroy();
+    screenDestroy();
+    timerDestroy();
+    free(fase1);
     return 0;
 }
