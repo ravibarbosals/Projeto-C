@@ -68,11 +68,11 @@ Na Fase 3, se o jogador errar 7 vezes, o número secreto muda automaticamente.
 ## 🧠 Exemplos de Enigmas:
 Os enigmas ainda estão sendo pensados, pois estamos pensando em usar assuntos da materia de lógica para programação, mas se não formos implementar essa ideia o padrão dos enigmas seriam esses:
 
-"A soma dos dígitos é 15."
+"Divide o mundo em dois, sem resto, sem razao..."
 
-"O número é múltiplo de 7."
+"Nunca caminha aos pares, sempre sozinho vai.."
 
-"Está entre os quadrados de 30 e 35."
+"Dança no ritmo das mãos... conte nos dedos e vai adivinhar..."
 
 
 ## 🚧 Em desenvolvimento:
