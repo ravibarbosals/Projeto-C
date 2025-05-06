@@ -68,7 +68,7 @@ Na Fase 3, se o jogador errar 7 vezes, o número secreto muda automaticamente.
 ## 🧠 Exemplos de Enigmas:
 Os enigmas ainda estão sendo pensados, pois estamos pensando em usar assuntos da materia de lógica para programação, mas se não formos implementar essa ideia o padrão dos enigmas seriam esses:
 
-"Divide o mundo em dois, sem resto, sem razao..."
+"Divide o mundo em dois, sem resto, sem razão..."
 
 "Nunca caminha aos pares, sempre sozinho vai.."
 
