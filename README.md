@@ -19,7 +19,7 @@ CESAR School
 ## 5. Instruções para compilar e executar
 
 ## 6. Descrição do jogo
-**Code Riddle** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado.
+**Code Riddle** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral.
 
 ## 🎮 Regras do Jogo:
 O jogo possui 3 fases, com níveis de dificuldade crescentes.
@@ -37,6 +37,7 @@ O jogador recebe enigmas como pista.
 A partir dos enigmas, ele tem 7 tentativas para adivinhar o número.
 
 Na Fase 3, se o jogador errar 7 vezes, o número secreto muda automaticamente.
+
 
 ## 🧠 Exemplos de Enigmas:
 Os enigmas ainda estão sendo pensados, pois estamos pensando em usar assuntos da materia de lógica para programação, mas se não formos implementar essa ideia o padrão dos enigmas seriam esses:
