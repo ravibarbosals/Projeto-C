@@ -19,33 +19,30 @@ CESAR School
 ## 5. Instruções para compilar e executar
 
 ✅ Pré-requisitos
-Compilador C instalado (ex: GCC via MinGW no Windows)
 
-A biblioteca CLI-lib colocada corretamente:
+Estar em um ambiente Linux (ou WSL com Ubuntu).
 
-Arquivos .h da biblioteca devem estar em include/
+Ter o GCC e o make instalados no sistema.
 
-Arquivos .c da biblioteca devem estar em src/
+Estar dentro do diretório do projeto.
 
-🛠️ Compilação
-No terminal, dentro da raiz do projeto, execute:
+Passos:
 
-**gcc ./src/*.c -I./include -o coderiddler**
+Acesse o diretório do projeto:
 
-Isso compila todos os arquivos .c da pasta src/ e usa os cabeçalhos da pasta include/.
-O executável coderiddler será gerado na raiz do projeto.
+cd /mnt/d/JOGOS\ EPIC/ravi\ vscode/Projeto
 
-▶️ Execução
-No terminal (após compilar), rode:
+Compile o projeto com o Makefile:
+make
 
-**./coderiddler**
+Execute o jogo:
+./build/game
 
-No Windows, você pode executar com:
-
-**coderiddler.exe**
+Para limpar os arquivos compilados:
+make clean
 
 ## 6. Descrição do jogo
-**CODE RIDDLER** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral.
+**CODE RIDDLER** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral. Queremos também implementar assuntos aprendidos em Lógica para programação
 
 ## 🎮 Regras do Jogo:
 O jogo possui 3 fases, com níveis de dificuldade crescentes.

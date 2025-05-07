@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "timer.h": "c",
+        "keyboard.h": "c",
+        "screen.h": "c",
+        "stdio.h": "c"
+    },
+}
