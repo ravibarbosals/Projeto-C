@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h> 
+
 #include "jogo.h"
 #include "screen.h"
+#include "keyboard.h"
 
 int gerarNumero(int limite) {
     return rand() % limite + 1;
@@ -18,7 +21,7 @@ void mostrarEnigma(int numero) {
     }
 
     if (numero % 5 == 0) {
-        printf(" RIDDLE: Dança no ritmo das maos... conte nos dedos e vai adivinhar...\n");
+        printf(" RIDDLE: Danca no ritmo das maos... conte nos dedos e vai adivinhar...\n");
     }
 
     if (numero > 50) {
@@ -28,38 +31,57 @@ void mostrarEnigma(int numero) {
     }
 }
 
+int lerNumero() {
+    int numero = 0;
+    char ch;
+
+    while (1) {
+        ch = readch();
+
+        if (ch == 10) break; 
+        if (isdigit(ch)) {
+            numero = numero * 10 + (ch - '0');
+            printf("%c", ch); 
+        }
+    }
+    return numero;
+}
 void jogarFase(Jogo *jogo) {
     int chute;
 
     screenClear();
-    screenGotoxy(10, 3);
-    printf("=== CODE RIDDLER: Fase %d ===\n", jogo->fase);
-
+    screenInit(1);
+    screenGotoxy(28, 2);
+    printf("=== CODE RIDDLER: Fase %d ===", jogo->fase);
+    
+    screenGotoxy(10, 4);
     mostrarEnigma(jogo->numeroSecreto);
 
     for (int i = 1; i <= jogo->tentativas; i++) {
-        screenGotoxy(10, 9 + i);
-        printf("\n Tentativa %d de %d: ", i, jogo->tentativas);
-        scanf("%d", &chute);
+        screenGotoxy(20, 5 + (i - 1)* 4);
+        printf("Tentativa %d de %d: ", i, jogo->tentativas);
+        
+        chute = lerNumero();
 
         if (chute == jogo->numeroSecreto) {
-            screenGotoxy(10, 18);
+            screenGotoxy(20, 10 + i * 4);
             printf("!!Parabens! Voce passou na Fase %d do RIDDLER!!\n", jogo->fase);
             return;
-        } else {
-            screenGotoxy(10, 10 + i);
-            printf(" RIDDLER: Tente outra vez! HAHAHAHAHAHAHA \n");
+        } 
+            
+        screenGotoxy(20, 11 + (i - 1) * 4);
+        printf(" RIDDLER: Tente outra vez! HAHAHAHAHAHAHA\n");
 
-            screenGotoxy(10, 11 + i);
-            if (chute < jogo->numeroSecreto) {
-                printf(" RIDDLER: Ainda está cedo... pense maior! \n");
-            } else {
-                printf(" RIDDLER: Foi longe demais... USE SEU CEREBRO! \n");
-            }
+        screenGotoxy(20, 12 + (i - 1)* 4);
+        if (chute < jogo->numeroSecreto) {
+            printf(" RIDDLER: Ainda está cedo... pense maior!\n");
+        } else {
+            printf(" RIDDLER: Foi longe demais... USE SEU CEREBRO!\n");
+            
         }
     }
 
-    screenGotoxy(10, 18);
+    screenGotoxy(20, 10 + jogo->tentativas * 4);
     printf("\n RIDDLER: !!FIM DE JOGO!! O numero era: %d\n", jogo->numeroSecreto);
 }
 

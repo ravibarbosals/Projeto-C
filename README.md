@@ -9,6 +9,7 @@
 
 ## 2. Disciplina
 Programação Imperativa e Funcional - 2025.1
+Lógica de Programação - 2025.1
 
 ## 3. Instituição de Ensino
 CESAR School
@@ -28,11 +29,19 @@ Estar dentro do diretório do projeto.
 
 Passos:
 
-Acesse o diretório do projeto:
+-Como instalar o GCC e Make:
+ bash:
+ sudo apt update
+ sudo apt install build-essential
 
-cd /mnt/d/JOGOS\ EPIC/ravi\ vscode/Projeto
+ Ou escreva esse codigo aqui que ja vai instalar tudo e preparar seu ambiente:
+ **sudo apt update && sudo apt install -y build-essential**
 
-Compile o projeto com o Makefile:
+-Acesse o diretório do projeto usando o WSL Ubuntu:
+
+**cd /mnt/d/JOGOS\ EPIC/ravi\ vscode/Projeto**
+
+-Compile o projeto com o Makefile:
 make
 
 Execute o jogo:
