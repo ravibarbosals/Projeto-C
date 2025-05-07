@@ -1,83 +1,108 @@
-/**
- * main.h
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
-*/
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12;
-int incX = 1, incY = 1;
+typedef struct {
+    int fase;
+    int numeroSecreto;
+    int tentativas;
+} Jogo;
 
-void printHello(int nextX, int nextY)
-{
-    screenSetColor(CYAN, DARKGRAY);
-    screenGotoxy(x, y);
-    printf("           ");
-    x = nextX;
-    y = nextY;
-    screenGotoxy(x, y);
-    printf("Hello World");
+int gerarNumero(int limite) {
+    return rand() % limite + 1;
 }
 
-void printKey(int ch)
-{
-    screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(35, 22);
-    printf("Key code :");
+void mostrarEnigma(int numero) {
+    printf("\n \n");
 
-    screenGotoxy(34, 23);
-    printf("            ");
-    
-    if (ch == 27) screenGotoxy(36, 23);
-    else screenGotoxy(39, 23);
+    if (numero % 2 == 0) {
+        printf(" RIDDLE: Divide o mundo em dois, sem resto, sem razao...\n");
+    } else {
+        printf(" RIDDLE: Nunca caminha aos pares, sempre sozinho vai.\n");
+    }
 
-    printf("%d ", ch);
-    while (keyhit())
-    {
-        printf("%d ", readch());
+    if (numero % 5 == 0) {
+        printf(" RIDDLE: Dança no ritmo das mãos... conte nos dedos e vai adivinhar...\n");
+    }
+
+    if (numero > 50) {
+        printf(" RIDDLE: Mais do que metade, mas menos do que tudo...\n");
+    } else {
+        printf(" RIDDLE: A sombra da metade ainda o cobre.\n");
     }
 }
 
-int main() 
-{
+void jogarFase(Jogo *jogo) {
+    int chute;
+
+    screenClear();
+    screenGotoxy(10, 3);
+    printf("=== CODE REDDLER: Fase 1 ===\n");
+
+    mostrarEnigma(jogo->numeroSecreto);
+
+    for (int i = 1; i <= jogo->tentativas; i++) {
+        screenGotoxy(10, 9 + i);
+        printf("\n Tentativa %d de %d: ", i, jogo->tentativas);
+        scanf("%d", &chute);
+        
+        if (chute == jogo->numeroSecreto) {
+            screenGotoxy(10, 18);
+            printf("!!Parabens passou na Fase 1 do RIDDLER!!\n");
+            return;
+        } else {
+            screenGotoxy(10, 10 + i);
+            printf(" RIDDLER: Tente outra vez! HAHAHAHAHAHAHA \n");
+
+
+            screenGotoxy(10, 11 + i);
+            if (chute < jogo->numeroSecreto) {
+                printf(" RIDDLER: Ainda esta cedo... pense maior! \n");
+            } else {
+                printf(" RIDDLER: Foi longe demais... USE SEU CEREBRO! \n");
+            }
+        }
+    }
+    screenGotoxy(10, 18);
+    printf("\n RIDDLER: !!FIM DE JOGO!! A mente vacilou, mas o número nunca mentiu: %d\n", jogo->numeroSecreto);
+}
+
+void executarJogo() {
+    Jogo *fase1 = (Jogo *) malloc(sizeof(Jogo));
+    fase1->fase = 1;
+    fase1->numeroSecreto = gerarNumero(100);
+    fase1->tentativas = 7;
+
+    jogarFase(fase1);
+
+    free(fase1);
+}
+
+int main() {
     static int ch = 0;
-    static long timer = 0;
+
+    srand(time(NULL));
 
     screenInit(1);
     keyboardInit();
     timerInit(50);
-
-    printHello(x, y);
     screenUpdate();
 
-    while (ch != 10 && timer <= 100) //enter or 5s
-    {
-        // Handle user input
-        if (keyhit()) 
-        {
+    executarJogo();  
+
+    while (ch != 10) {
+        if (keyhit()) {
             ch = readch();
-            printKey(ch);
             screenUpdate();
         }
 
-        // Update game state (move elements, verify collision, etc)
-        if (timerTimeOver() == 1)
-        {
-            int newX = x + incX;
-            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1) incX = -incX;
-            int newY = y + incY;
-            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
-
-            printHello(newX, newY);
-
+        if (timerTimeOver() == 1) {
             screenUpdate();
-            timer++;
         }
     }
 
