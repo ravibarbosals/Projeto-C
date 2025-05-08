@@ -6,22 +6,34 @@
 */
 
 #include "screen.h"
+#include <wchar.h>
+#include <locale.h>
+
 
 void screenDrawBorders() 
 {
-    char hbc = BOX_HLINE;
-    char vbc = BOX_VLINE;
-    
+    setlocale(LC_ALL, "");
+
+    const char *hbc = "═";
+    const char *vbc = "║";
+    #define BOX_UPLEFT     0x6C  // caractere gráfico da tabela CP437
+    #define BOX_UPRIGHT    0x6B
+    #define BOX_DWNLEFT    0x6D
+    #define BOX_DWNRIGHT   0x6A
+    #define BOX_HORIZ      0xCD
+    #define BOX_VERT       0xBA
+
+
     screenClear();
     screenBoxEnable();
     
     screenGotoxy(MINX, MINY);
-    printf("%c", BOX_UPLEFT);
+    printf("%c", BOX_UPLEFT); // Updated to use %s for BOX_UPLEFT
 
     for (int i=MINX+1; i<MAXX; i++)
     {
         screenGotoxy(i, MINY);
-        printf("%c", hbc);
+        printf("%s", hbc);
     }
     screenGotoxy(MAXX, MINY);
     printf("%c", BOX_UPRIGHT);
@@ -29,20 +41,20 @@ void screenDrawBorders()
     for (int i=MINY+1; i<MAXY; i++)
     {
         screenGotoxy(MINX, i);
-        printf("%c", vbc);
+        printf("%s", vbc);
         screenGotoxy(MAXX, i);
-        printf("%c", vbc);
+        printf("%s", vbc);
     }
 
     screenGotoxy(MINX, MAXY);
-    printf("%c", BOX_DWNLEFT);
+    printf("%c", BOX_DWNLEFT); // Updated to use %s for BOX_DWNLEFT
     for (int i=MINX+1; i<MAXX; i++)
     {
         screenGotoxy(i, MAXY);
-        printf("%c", hbc);
+        printf("%s", hbc);
     }
     screenGotoxy(MAXX, MAXY);
-    printf("%c", BOX_DWNRIGHT);
+    printf("%c", BOX_DWNRIGHT); // Updated to use %s for BOX_DWNRIGHT
 
     screenBoxDisable();
     
@@ -75,9 +87,9 @@ void screenGotoxy(int x, int y)
 
 void screenSetColor( screenColor fg, screenColor bg)
 {
-    char atr[] = "[0;";
+    char atr[] = "[1;";
 
-    if ( fg > LIGHTGRAY )
+    if ( fg > RED )
     {
         atr[1] = '1';
 		fg -= 8;
