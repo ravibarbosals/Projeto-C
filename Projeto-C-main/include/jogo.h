@@ -7,9 +7,11 @@ typedef struct {
     int tentativas;
 } Jogo;
 
-int gerarNumero(int limite);
-void mostrarEnigma(int numero);
-void jogarFase(Jogo *jogo);
 void executarJogo();
+
+int gerarNumero(int limite);
+void mostrarEnigma(int numeroSecreto);
+void jogarFase(Jogo *jogo);
+void jogarFaseComTroca(Jogo *jogo);
 
 #endif

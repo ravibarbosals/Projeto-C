@@ -1,68 +1,60 @@
 /**
- * keyboard.h
+ * keyboard.c
  * Created on Aug, 23th 2023
  * Author: Tiago Barros
  * Based on "From C to C++ course - 2002"
-*/
+ */
 
-#include <termios.h>
-#include <unistd.h>
-
+#include <conio.h>    // Para _kbhit() e _getch()
+#include <windows.h>  // Para a API de console do Windows
 #include "keyboard.h"
 
-static struct termios initialSettings, newSettings;
-static int peekCharacter;
+// Variáveis globais
+static int peekCharacter = -1;  // Inicializa com -1
 
-
-void keyboardInit()
-{
-    tcgetattr(0,&initialSettings);
-    newSettings = initialSettings;
-    newSettings.c_lflag &= ~ICANON;
-    newSettings.c_lflag &= ~ECHO;
-    newSettings.c_lflag &= ~ISIG;
-    newSettings.c_cc[VMIN] = 1;
-    newSettings.c_cc[VTIME] = 0;
-    tcsetattr(0, TCSANOW, &newSettings);
+/**
+ * Função para inicializar o modo de leitura do teclado no Windows.
+ * Não é necessário modificar o terminal como no Unix.
+ */
+void keyboardInit() {
+    // No Windows, não há necessidade de alterar as configurações do terminal
+    // A leitura de teclado já é feita sem bloqueio por padrão com _kbhit() e _getch()
 }
 
-void keyboardDestroy()
-{
-    tcsetattr(0, TCSANOW, &initialSettings);
+/**
+ * Função para restaurar o estado inicial.
+ * No Windows, como não alteramos o terminal, esta função não é necessária.
+ */
+void keyboardDestroy() {
+    // No Windows, não é necessário restaurar nada
 }
 
-int keyhit()
-{
-    unsigned char ch;
-    int nread;
-
-    if (peekCharacter != -1) return 1;
-    
-    newSettings.c_cc[VMIN]=0;
-    tcsetattr(0, TCSANOW, &newSettings);
-    nread = read(0,&ch,1);
-    newSettings.c_cc[VMIN]=1;
-    tcsetattr(0, TCSANOW, &newSettings);
-    
-    if(nread == 1) 
-    {
-        peekCharacter = ch;
+/**
+ * Função para verificar se uma tecla foi pressionada.
+ * Retorna 1 se houver uma tecla pressionada, 0 caso contrário.
+ */
+int keyhit() {
+    // Verifica se há uma tecla pressionada usando _kbhit()
+    if (_kbhit()) {
+        // Se houver, retorna 1 (indicando que uma tecla foi pressionada)
+        peekCharacter = _getch();  // Armazena a tecla pressionada
         return 1;
     }
-    
-    return 0;
+    return 0;  // Não há tecla pressionada
 }
 
-int readch()
-{
-    char ch;
-
-    if(peekCharacter != -1)
-    {
-        ch = peekCharacter;
-        peekCharacter = -1;
+/**
+ * Função para ler um caractere pressionado.
+ * Retorna o caractere pressionado.
+ */
+int readch() {
+    // Se houver um caractere "peeking", retorna ele
+    if (peekCharacter != -1) {
+        int ch = peekCharacter;
+        peekCharacter = -1;  // Limpa a variável peekCharacter
         return ch;
     }
-    read(0,&ch,1);
-    return ch;
+
+    // Caso contrário, lê diretamente do teclado usando _getch()
+    return _getch();
 }

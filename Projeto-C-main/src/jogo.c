@@ -1,21 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <ctype.h> 
+#include <ctype.h>
 
 #include "jogo.h"
 #include "screen.h"
 #include "keyboard.h"
 
+void fase1();
+void fase2();
+void fase3();
+
+int ehPrimo(int n) {
+    if (n <= 1) return 0;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0)
+            return 0;
+    return 1;
+}
+
 int gerarNumero(int limite) {
-    limite=100;
     return rand() % limite + 1;
 }
 
 void mostrarEnigma(int numero) {
     printf("\n\n");
-    
-    if ((numero > 20 && numero % 2 == 0))
+
+    if (!(numero > 20 && numero % 2 == 0))
         printf("- Não é verdade que o número seja par e maior que 20.\n");
 
     if ((numero % 2 == 0) || (numero % 3 == 0 && numero % 5 != 0))
@@ -24,19 +35,26 @@ void mostrarEnigma(int numero) {
     if ((numero < 50 && numero % 4 == 0) || (numero > 75 && numero % 3 == 0))
         printf("- Se o número é menor que 50 e múltiplo de 4, ou maior que 75 e múltiplo de 3, então esta proposição é verdadeira.\n");
 
-    if (((numero % 2 != 0) && (numero)))
+    if (!(numero % 2 != 0 && ehPrimo(numero)))
         printf("- Não é verdade que o número seja ímpar e primo ao mesmo tempo.\n");
 
-    if (((numero) && numero > 36) || numero == 0)
+    int quadrado = 0;
+    for (int i = 1; i * i <= numero; i++) {
+        if (i * i == numero) {
+            quadrado = 1;
+            break;
+        }
+    }
+    if ((quadrado && numero > 36) || numero == 0)
         printf("- O número é um quadrado perfeito maior que 36, ou é zero.\n");
 
     if ((numero % 10 == 1 && numero > 50) || (numero < 30 && numero % 6 == 0))
         printf("- O número termina com 1 e é maior que 50, ou é menor que 30 e múltiplo de 6.\n");
 
-    if (((numero % 3 == 0 || numero % 5 == 0) && numero > 90))
+    if (!((numero % 3 == 0 || numero % 5 == 0) && numero > 90))
         printf("- Não é verdade que o número seja maior que 90 e múltiplo de 3 ou 5.\n");
 
-    if (!((numero) && numero % 2 == 0))
+    if (ehPrimo(numero) && numero % 2 != 0)
         printf("- Se o número é primo, então ele não é par.\n");
 
     if ((numero >= 20 && numero <= 40) || (numero >= 60 && numero <= 80))
@@ -44,9 +62,7 @@ void mostrarEnigma(int numero) {
 
     if ((numero % 7 == 0 && numero < 70) || (numero % 11 == 0 && numero > 50))
         printf("- O número é múltiplo de 7 e menor que 70, ou múltiplo de 11 e maior que 50.\n");
-
 }
-
 
 int lerNumero() {
     int numero = 0;
@@ -71,22 +87,22 @@ void jogarFase(Jogo *jogo) {
     screenInit(1);
     screenGotoxy(28, 2);
     printf("=== CODE RIDDLER: Fase %d ===", jogo->fase);
-    
+
     screenGotoxy(10, 4);
     mostrarEnigma(jogo->numeroSecreto);
 
     for (int i = 1; i <= jogo->tentativas; i++) {
         screenGotoxy(20, 5 + (i - 1) * 4);
         printf("Tentativa %d de %d: ", i, jogo->tentativas);
-        
+
         chute = lerNumero();
 
         if (chute == jogo->numeroSecreto) {
             screenGotoxy(20, 10 + i * 4);
             printf("!!Parabéns! Você passou na Fase %d do RIDDLER!!\n", jogo->fase);
             return;
-        } 
-            
+        }
+
         screenGotoxy(20, 11 + (i - 1) * 4);
         printf("RIDDLER: Tente outra vez! HAHAHAHAHAHAHA\n");
 
@@ -112,10 +128,8 @@ void executarJogo() {
     }
 
     fase1->fase = 1;
-    fase1->numeroSecreto = gerarNumero(10);
+    fase1->numeroSecreto = gerarNumero(100); // Agora respeita o limite
     fase1->tentativas = 10;
-
-    
 
     jogarFase(fase1);
 
