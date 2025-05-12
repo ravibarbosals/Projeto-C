@@ -39,7 +39,7 @@ Passos:
 
 -Acesse o diretório do projeto usando o WSL Ubuntu:
 
-**cd /mnt/d/JOGOS\ EPIC/ravi\ vscode/Projeto**
+**cd /mnt/(c ou d)/JOGOS\ EPIC/ravi\ vscode/Projeto**
 
 -Compile o projeto com o Makefile:
 make
