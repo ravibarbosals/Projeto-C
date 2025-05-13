@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
-#include "../include/screen.h"
-#include "../include/keyboard.h"
-#include "../include/timer.h"
-#include "../include/jogo.h"
+#include "screen.h"
+#include "keyboard.h"
+#include "timer.h"
+#include "jogo.h"
 
 int main() {
     static int ch = 0;
@@ -13,22 +13,30 @@ int main() {
     screenInit(1);
     keyboardInit();
     timerInit(50);
-    screenUpdate();  // Atualiza a tela após a inicialização
+    screenUpdate();
 
-    // Função que provavelmente contém a lógica do jogo
-    executarJogo();
+    // Menu principal
+    while (1) {
+        screenClear();
+        screenGotoxy(25, 5);
+        printf("=== JOGO DE ADIVINHAÇÃO ===");
+        screenGotoxy(25, 7);
+        printf("1. Iniciar Jogo");
+        screenGotoxy(25, 8);
+        printf("2. Ver Ranking");
+        screenGotoxy(25, 9);
+        printf("3. Sair");
+        screenGotoxy(25, 11);
+        printf("Escolha uma opção: ");
 
-    // Continua até pressionar 'Enter' (código 10)
-    while (ch != 10) {
-        // Verifica se uma tecla foi pressionada
-        if (keyhit()) {
-            ch = readch();
-            screenUpdate();  // Atualiza a tela após a tecla ser pressionada
-        }
-
-        // Verifica se o tempo foi esgotado
-        if (timerTimeOver() == 1) {
-            screenUpdate();
+        ch = readch();
+        
+        if (ch == '1') {
+            executarJogo();
+        } else if (ch == '2') {
+            mostrarRanking();
+        } else if (ch == '3') {
+            break;
         }
     }
 

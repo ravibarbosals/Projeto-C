@@ -105,33 +105,16 @@ static inline void screenClear() {
 }
 #endif
 
-void screenUpdate() {
-    fflush(stdout);
-}
+// Declarações apenas (sem implementação)
+void screenUpdate();
+void screenSetNormal();
+void screenSetBold();
+void screenSetBlink();
+void screenSetReverse();
+void screenBoxEnable();
+void screenBoxDisable();
 
-void screenSetNormal() {
-    printf("%s%s", ESC, NORMALTEXT);
-}
 
-void screenSetBold() {
-    printf("%s%s", ESC, BOLDTEXT);
-}
-
-void screenSetBlink() {
-    printf("%s%s", ESC, BLINKTEXT);
-}
-
-void screenSetReverse() {
-    printf("%s%s", ESC, REVERSETEXT);
-}
-
-void screenBoxEnable() {
-    printf("%s%s", ESC, BOX_ENABLE);
-}
-
-void screenBoxDisable() {
-    printf("%s%s", ESC, BOX_DISABLE);
-}
 
 void screenInit(int drawBorders);
 

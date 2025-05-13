@@ -112,3 +112,31 @@ void screenSetColor(screenColor fg, screenColor bg)
     // Aplica as cores usando a sequência ANSI de escape
     printf("%s%s%d;%dm", ESC, atr, fg + 30, bg + 40);
 }
+
+void screenUpdate() {
+    fflush(stdout);
+}
+
+void screenSetNormal() {
+    printf("%s%s", ESC, NORMALTEXT);
+}
+
+void screenSetBold() {
+    printf("%s%s", ESC, BOLDTEXT);
+}
+
+void screenSetBlink() {
+    printf("%s%s", ESC, BLINKTEXT);
+}
+
+void screenSetReverse() {
+    printf("%s%s", ESC, REVERSETEXT);
+}
+
+void screenBoxEnable() {
+    printf("%s%s", ESC, BOX_ENABLE);
+}
+
+void screenBoxDisable() {
+    printf("%s%s", ESC, BOX_DISABLE);
+}
