@@ -53,6 +53,14 @@ make clean
 ## 6. Descrição do jogo
 **CODE RIDDLER** é um jogo de adivinhação por fases, onde o jogador deve decifrar um número secreto com base em enigmas por fase. A cada fase, a dificuldade aumenta, e o número de tentativas é limitado. E durante o jogo temos o personagem RIDDLER(Charada) que vai ficar desdenhando da sua cara e dizendo as charadas de forma teatral. Queremos também implementar assuntos aprendidos em Lógica para programação
 
+🏆 Sistema de Pontuação e Ranking
+
+📊 Pontuação
+A pontuação é calculada com base na quantidade de tentativas realizadas pelo jogador para acertar o número secreto. Menos tentativas resultam em uma pontuação mais alta.
+
+🥇 Ranking
+O jogo mantém um ranking dos jogadores com base em suas pontuações. Este ranking é armazenado em um arquivo externo, permitindo que as pontuações sejam persistidas entre as sessões de jogo.
+
 ## 🎮 Regras do Jogo:
 O jogo possui 3 fases, com níveis de dificuldade crescentes.
 
