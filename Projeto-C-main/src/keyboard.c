@@ -1,11 +1,11 @@
 /**
- * keyboard.c - Versão corrigida para Linux/WSL
+ * keyboard.c - Versão definitiva para Linux/WSL
  */
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
-#include <sys/select.h>
-#include <sys/time.h>
+#include <sys/select.h>  // Para fd_set, FD_*, select()
+#include <sys/time.h>    // Para struct timeval
 #include "keyboard.h"
 
 static struct termios oldt, newt;
@@ -22,15 +22,15 @@ void keyboardDestroy() {
 }
 
 int keyhit() {
-    struct timeval tv = {0, 0};
+    struct timeval tv = { .tv_sec = 0, .tv_usec = 0 };
     fd_set fds;
+    
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
+    
     return select(STDIN_FILENO+1, &fds, NULL, NULL, &tv) > 0;
 }
 
 int readch() {
-    int ch;
-    ch = getchar();
-    return ch;
+    return getchar();
 }

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>    // Adicionado para printf
 #include <time.h>
 #include "screen.h"
 #include "keyboard.h"
@@ -6,44 +7,41 @@
 #include "jogo.h"
 
 int main() {
-    static int ch = 0;
-
-    // Inicialização dos componentes
-    srand(time(NULL));
+    // Inicialização
     screenInit(1);
     keyboardInit();
-    timerInit(50);
-    screenUpdate();
-
-    // Menu principal
-    while (1) {
+    
+    int ch;
+    while(1) {
+        printf("\033[32m"); // Código ANSI para texto verde
         screenClear();
-        screenGotoxy(25, 5);
-        printf("=== JOGO DE ADIVINHAÇÃO ===");
-        screenGotoxy(25, 7);
+        screenGotoxy(1, 1);
+        printf("=== CODE RIDDLER ===");
+        screenGotoxy(1, 3);
         printf("1. Iniciar Jogo");
-        screenGotoxy(25, 8);
+        screenGotoxy(1, 4);
         printf("2. Ver Ranking");
-        screenGotoxy(25, 9);
+        screenGotoxy(1, 5);
         printf("3. Sair");
-        screenGotoxy(25, 11);
+        screenGotoxy(1, 7);
         printf("Escolha uma opção: ");
+        fflush(stdout);
 
+        while(!keyhit()); // Espera até que uma tecla seja pressionada
         ch = readch();
         
-        if (ch == '1') {
-            executarJogo();
-        } else if (ch == '2') {
-            mostrarRanking();
-        } else if (ch == '3') {
-            break;
+        // Processa a escolha
+        switch(ch) {
+            case '1':
+                executarJogo();
+                break;
+            case '2':
+                mostrarRanking();
+                break;
+            case '3':
+                keyboardDestroy();
+                screenDestroy();
+                return 0;
         }
     }
-
-    // Destrói os componentes ao final
-    keyboardDestroy();
-    screenDestroy();
-    timerDestroy();
-
-    return 0;
 }
