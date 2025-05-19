@@ -1,13 +1,20 @@
 #include <stdio.h>
-#include <locale.h>       // Para setlocale e LC_ALL
+#include <locale.h>
 #include "screen.h"
-#include "keyboard.h"  
-   // Para keyhit() e readch()
+#include "keyboard.h"
+#include <string.h>
+
+// Adicione o protótipo da função antes de qualquer uso
+void preencherFundoEntreBordasComTitle(void);
+
 /* Limpa toda a tela e leva cursor a 1,1 */
 void screenClear() {
     printf("%s%s", ESC, CLEARSCREEN);
     fflush(stdout);
 }
+
+
+
 /* Desenha as bordas da janela */
 void screenDrawBorders(void) {
     setlocale(LC_ALL, "");
@@ -47,7 +54,9 @@ void screenDrawBorders(void) {
     screenGotoxy(MAXX, MAXY);
     putchar(BOX_DWNRIGHT);
 
-    screenBoxDisable();          // sai do modo box-drawing
+    screenBoxDisable();    
+    // Mostra o fundo entre as bordas
+    preencherFundoEntreBordasComTitle();
 }
 
 /* Inicializa a tela: limpa, desenha bordas (se solicitado), move cursor e esconde */
@@ -82,8 +91,7 @@ void screenSetColor(screenColor fg, screenColor bg) {
 }
 
 void desenharCharadaAscii() {
-    
-    printf("\033[32m"); // Código ANSI para texto verde
+    // Não define cor aqui!
     screenClear();
 
     screenGotoxy(15, 2);
@@ -111,7 +119,7 @@ void desenharCharadaAscii() {
     screenGotoxy(15, 13);
     printf("⠀⠀⠀  ⠀⠈⠙⠛⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠛⠛⠉⠁⠀⠀⠀⠀\n");
     screenGotoxy(15, 14);
-    printf("⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣷⡍⠻⢷⠿⢿⠿⢧⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀\n");
+    printf("⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣷⡍⠻⢷⠿⢿⠿⢧⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 15);
     printf("⠀⠀⠀⣀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣆⣰⣶⣆⣀⣾⣿⣿⣿⣿⣿⣿⣿⡿⠿⣥⣾⣿⡀⠀⠀⠀⠀\n");
     screenGotoxy(15, 16);
@@ -119,7 +127,7 @@ void desenharCharadaAscii() {
     screenGotoxy(15, 17);
     printf("⠀⠿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠻⣿⣿⣿⣿⣿⣿⣿⣏⣡⣼⣿⣦⣄⠘⢿⣿⣿⣿⣿⡄⠀\n");
     screenGotoxy(15, 18);
-    printf("⠀⣬⣿⣃⢨⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣿⣿⡷⠀\n");
+    printf("⠀⣬⣿⣃⢨⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣿⣿⡷⠀\n");
     screenGotoxy(15, 19);
     printf("⠀⠹⣿⣽⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⡿⠛⠉⠉⠙⢿⣿⣿⣿⠁⠀\n");
     screenGotoxy(15, 20);
@@ -170,6 +178,43 @@ void desenharCharadaAscii() {
     while (readch() != '\n'); // Espera Enter
 }
 
+const char *title[] = {
+    "      0      0      0      0      0      0      0      0      0      0      0      0      ",
+    "      1      1      1      1      0      1      1      1      1      1      1      1      ",
+    "      0      1      1      1      1      0      0      1      1      1      1      1      ",
+    "      0      0      0      0      0      1      0      0      0      0      0      0      ",
+    "      0      1      0      1      0      0      1      1      0      0      1      1      ",
+    "      0      1      0      1      0      0      1      1      0      0      1      1      ",
+    "      1      1      0      1      0      1      1      0      1      1      0      1      ",
+    "      1      1      0      1      0      1      1      0      1      1      0      1      ",
+    "      0      0      1      0      0      0      1      0      0      0      1      0      ",
+    "      1      0      1      0      1      0      1      0      1      0      1      0      ",
+    "      1      0      1      0      1      0      1      0      1      0      1      0      ",
+    "      1      1      0      0      1      1      0      0      1      1      0      0      ",
+    "      1      1      0      0      1      1      0      0      1      1      0      0      ",
+    "      1      1      1      1      1      1      1      1      1      1      1      1      ",
+    "      0      0      0      0      0      0      0      0      0      0      0      0      ",
+};
+
+void preencherFundoEntreBordasComTitle() {
+    int num_lines = sizeof(title) / sizeof(title[0]);
+    int y_idx = 0;
+    for (int y = MINY + 1; y < MAXY; y++) {
+        const char *linha = title[y_idx % num_lines];
+        int len = strlen(linha);
+        int x_idx = 0;
+        for (int x = MINX + 1; x < MAXX; x++) {
+            screenGotoxy(x, y);
+            char ch = linha[x_idx % len];
+            putchar(ch);
+            x_idx++;
+        }
+        y_idx++;
+    }
+}
+
+
+
 void screenUpdate(void)    { fflush(stdout); }
 void screenSetNormal(void) { printf(ESC NORMALTEXT); }
 void screenSetBold(void)   { printf(ESC BOLDTEXT); }
@@ -180,4 +225,6 @@ void screenBoxDisable(void){ printf(ESC BOX_DISABLE); }
 void screenHomeCursor(void){ printf(ESC HOMECURSOR); }
 void screenHideCursor(void){ printf(ESC HIDECURSOR); }
 void screenShowCursor(void){ printf(ESC SHOWCURSOR); }
+
+;
 
