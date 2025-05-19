@@ -1,142 +1,183 @@
-/**
- * screen.c
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
-*/
-
+#include <stdio.h>
+#include <locale.h>       // Para setlocale e LC_ALL
 #include "screen.h"
-#include <wchar.h>
-#include <locale.h>
-
-void screenDrawBorders() 
-{
-    setlocale(LC_ALL, "");  // Garantir suporte para caracteres Unicode
-
-    const char *hbc = "═";  // Caracter para bordas horizontais
-    const char *vbc = "║";  // Caracter para bordas verticais
-
-    // Definições dos caracteres gráficos da tabela CP437 para bordas
-    #define BOX_UPLEFT     0x6C  // Canto superior esquerdo
-    #define BOX_UPRIGHT    0x6B  // Canto superior direito
-    #define BOX_DWNLEFT    0x6D  // Canto inferior esquerdo
-    #define BOX_DWNRIGHT   0x6A  // Canto inferior direito
-    #define BOX_HORIZ      0xCD  // Linha horizontal
-    #define BOX_VERT       0xBA  // Linha vertical
-
-    // Limpa a tela antes de desenhar as bordas
-    screenClear();
-    screenBoxEnable();
-    
-    // Desenha o canto superior esquerdo
-    screenGotoxy(MINX, MINY);
-    printf("%c", BOX_UPLEFT);
-
-    // Desenha a borda superior
-    for (int i = MINX + 1; i < MAXX; i++) {
-        screenGotoxy(i, MINY);
-        printf("%s", hbc);
-    }
-
-    // Desenha o canto superior direito
-    screenGotoxy(MAXX, MINY);
-    printf("%c", BOX_UPRIGHT);
-
-    // Desenha as bordas laterais
-    for (int i = MINY + 1; i < MAXY; i++) {
-        screenGotoxy(MINX, i);
-        printf("%s", vbc);
-        screenGotoxy(MAXX, i);
-        printf("%s", vbc);
-    }
-
-    // Desenha o canto inferior esquerdo
-    screenGotoxy(MINX, MAXY);
-    printf("%c", BOX_DWNLEFT);
-
-    // Desenha a borda inferior
-    for (int i = MINX + 1; i < MAXX; i++) {
-        screenGotoxy(i, MAXY);
-        printf("%s", hbc);
-    }
-
-    // Desenha o canto inferior direito
-    screenGotoxy(MAXX, MAXY);
-    printf("%c", BOX_DWNRIGHT);
-
-    screenBoxDisable();
-}
-
-void screenInit(int drawBorders)
-{
-    // Inicializa a tela, limpa e desenha bordas se necessário
-    screenClear();
-    if (drawBorders) {
-        screenDrawBorders();
-    }
-    screenHomeCursor();  // Posiciona o cursor no topo esquerdo
-    screenHideCursor();  // Esconde o cursor
-}
-
-void screenDestroy()
-{
-    // Restaura as cores padrão e limpa a tela ao destruir
-    printf("%s[0;39;49m", ESC);  // Reset das cores
-    screenSetNormal();  // Restaura o modo normal
-    screenClear();  // Limpa a tela
-    screenHomeCursor();  // Coloca o cursor na posição inicial
-    screenShowCursor();  // Exibe o cursor novamente
-}
-
-void screenGotoxy(int x, int y)
-{
-    // Garante que as coordenadas estejam dentro dos limites definidos
-    x = (x < 0 ? 0 : x >= MAXX ? MAXX - 1 : x);
-    y = (y < 0 ? 0 : y > MAXY ? MAXY : y);
-    
-    // Move o cursor para as coordenadas (x, y) na tela
-    printf("%s[f%s[%dB%s[%dC", ESC, ESC, y, ESC, x);
-}
-
-void screenSetColor(screenColor fg, screenColor bg)
-{
-    // Define as cores de primeiro plano (fg) e fundo (bg)
-    char atr[] = "[1;";
-
-    // Verifica se o valor de fg é maior que o limite de vermelho
-    if (fg > RED) {
-        atr[1] = '1';  // Ajusta para cores mais claras
-        fg -= 8;  // Ajusta o valor de fg para o intervalo correto
-    }
-
-    // Aplica as cores usando a sequência ANSI de escape
-    printf("%s%s%d;%dm", ESC, atr, fg + 30, bg + 40);
-}
-
-void screenUpdate() {
+#include "keyboard.h"  
+   // Para keyhit() e readch()
+/* Limpa toda a tela e leva cursor a 1,1 */
+void screenClear() {
+    printf("%s%s", ESC, CLEARSCREEN);
     fflush(stdout);
 }
+/* Desenha as bordas da janela */
+void screenDrawBorders(void) {
+    setlocale(LC_ALL, "");
+    screenClear();
+    screenBoxEnable();           // ativa modo box-drawing
 
-void screenSetNormal() {
-    printf("%s%s", ESC, NORMALTEXT);
+    // canto superior esquerdo
+    screenGotoxy(MINX, MINY);
+    putchar(BOX_UPLEFT);
+
+    // borda superior
+    for (int x = MINX + 1; x < MAXX; x++) {
+        screenGotoxy(x, MINY);
+        putchar(BOX_HLINE);
+    }
+    // canto superior direito
+    screenGotoxy(MAXX, MINY);
+    putchar(BOX_UPRIGHT);
+
+    // laterais
+    for (int y = MINY + 1; y < MAXY; y++) {
+        screenGotoxy(MINX, y);
+        putchar(BOX_VLINE);
+        screenGotoxy(MAXX, y);
+        putchar(BOX_VLINE);
+    }
+
+    // canto inferior esquerdo
+    screenGotoxy(MINX, MAXY);
+    putchar(BOX_DWNLEFT);
+    // borda inferior
+    for (int x = MINX + 1; x < MAXX; x++) {
+        screenGotoxy(x, MAXY);
+        putchar(BOX_HLINE);
+    }
+    // canto inferior direito
+    screenGotoxy(MAXX, MAXY);
+    putchar(BOX_DWNRIGHT);
+
+    screenBoxDisable();          // sai do modo box-drawing
 }
 
-void screenSetBold() {
-    printf("%s%s", ESC, BOLDTEXT);
+/* Inicializa a tela: limpa, desenha bordas (se solicitado), move cursor e esconde */
+void screenInit(int drawBorders) {
+    screenClear();
+    if (drawBorders) screenDrawBorders();
+    screenHomeCursor();
+    screenHideCursor();
 }
 
-void screenSetBlink() {
-    printf("%s%s", ESC, BLINKTEXT);
+/* Restaura cores, limpa e mostra cursor */
+void screenDestroy(void) {
+    printf(ESC NORMALTEXT);      // reseta atributos
+    screenClear();
+    screenHomeCursor();
+    screenShowCursor();
 }
 
-void screenSetReverse() {
-    printf("%s%s", ESC, REVERSETEXT);
+/* Move cursor ANSI para linha=y coluna=x */
+void screenGotoxy(int x, int y) {
+    printf("%s[%d;%dH", ESC, y, x);
+    fflush(stdout);
+}
+/* Define cores de primeiro-plano e fundo */
+void screenSetColor(screenColor fg, screenColor bg) {
+    char seq[20];
+    int bright = 0;
+    if (fg > LIGHTGRAY) { bright = 1; fg -= 8; }
+    // formata: ESC [<bright>;<fg+30>;<bg+40>m
+    snprintf(seq, sizeof(seq), ESC "[%d;%d;%dm", bright, fg + 30, bg + 40);
+    printf("%s", seq);
 }
 
-void screenBoxEnable() {
-    printf("%s%s", ESC, BOX_ENABLE);
+void desenharCharadaAscii() {
+    
+    printf("\033[32m"); // Código ANSI para texto verde
+    screenClear();
+
+    screenGotoxy(15, 2);
+    printf("⠀               ⢀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 3);
+    printf("⠀⠀⠀⠀  ⠀   ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀  ⠀ \n");
+    screenGotoxy(15, 4);
+    printf("⠀⠀⠀⠀⠀⠀  ⠀⢀⠙⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 5);
+    printf("⠀⠀⠀⠀⠀⠀⠀  ⠀⣷⣶⣤⣄⣈⣉⣉⣉⣉⣉⣉⣉⣁⣤⡄⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 6);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 7);
+    printf("⠀⠀⠀⠀⠀⠀  ⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 8);
+    printf("⠀⠀⠀⠀  ⠀⠀⢀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 9);
+    printf("⠀⠀   ⢀⣠⣶⣾⡏⢀⡈⠛⠻⠿⢿⣿⣿⣿⣿⣿⠿⠿⠟⠛⢀⠀⢶⣤⣀⠀⠀⠀\n");
+    screenGotoxy(15, 10);
+    printf("   ⠀⢠⣿⣿⣿⣿⡇⠸⣿⣿⣶⣶⣤⣤⣤⣤⣤⣤⣤⣶⣶⣿⡿⠂⣸⣿⣿⣷⡄⠀\n");
+    screenGotoxy(15, 11);
+    printf("  ⠀ ⢸⣿⣿⣿⣿⣿⣦⣄⡉⠛⠛⠛⠿⠿⠿⠿⠛⠛⠛⢉⣁⣤⣾⣿⣿⣿⣿⡷⠀\n");
+    screenGotoxy(15, 12);
+    printf("⠀⠀  ⠙⢿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣶⣶⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀\n");
+    screenGotoxy(15, 13);
+    printf("⠀⠀⠀  ⠀⠈⠙⠛⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠛⠛⠉⠁⠀⠀⠀⠀\n");
+    screenGotoxy(15, 14);
+    printf("⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣷⡍⠻⢷⠿⢿⠿⢧⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 15);
+    printf("⠀⠀⠀⣀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣆⣰⣶⣆⣀⣾⣿⣿⣿⣿⣿⣿⣿⡿⠿⣥⣾⣿⡀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 16);
+    printf("⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠘⠻⣿⣿⣿⣦⡀⠀⠀\n");
+    screenGotoxy(15, 17);
+    printf("⠀⠿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠻⣿⣿⣿⣿⣿⣿⣿⣏⣡⣼⣿⣦⣄⠘⢿⣿⣿⣿⣿⡄⠀\n");
+    screenGotoxy(15, 18);
+    printf("⠀⣬⣿⣃⢨⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣿⣿⡷⠀\n");
+    screenGotoxy(15, 19);
+    printf("⠀⠹⣿⣽⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⡿⠛⠉⠉⠙⢿⣿⣿⣿⠁⠀\n");
+    screenGotoxy(15, 20);
+    printf("⠀⠀⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣽⣿⣿⣿⣇⠀⠀⠀⠀⢸⣿⣿⣿⠂⠀\n");
+    screenGotoxy(15, 21);
+    printf("⠀⠀⢹⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢲⣿⣿⣿⣿⣿⣿⣿⣶⠦⠀⣼⣿⣿⣿⣀⡀\n");
+    screenGotoxy(15, 22);
+    printf("⠀⢰⣧⣼⣿⣿⣿⠃⠀⢀⣠⡀⠀⠀⠀⠀⠀⠀⣆⢸⣿⣿⣿⣿⣿⠿⣷⣶⣶⡄⠈⣿⣿⣿⣸⣿\n");
+    screenGotoxy(15, 23);
+    printf("⠀⠘⣿⣿⡞⣿⡏⠀⠚⠛⠉⠙⣧⡀⠀⠀⠈⣦⣻⣾⣿⣿⣻⣿⢏⡴⠋⠁⠀⠀⠀⣿⣿⣿⣿⡿\n");
+    screenGotoxy(15, 24);
+    printf("⠀⠀⠙⢠⣷⢿⣧⠀⠀⢲⣿⣶⣿⣿⣦⡀⢀⣾⣿⣿⣿⣯⣟⣷⣯⣷⣶⣶⣾⣿⣦⣿⡏⣿⡔⠁\n");
+    screenGotoxy(15, 25);
+    printf("⠀⠀⢠⡼⣧⠘⡏⠀⠀⠀⠁⢹⣂⣤⣼⡿⢻⡟⠻⣿⣿⣿⣿⣹⠯⠖⣁⣿⣿⣿⠛⢻⢃⣿⠷⠀\n");
+    screenGotoxy(15, 26);
+    printf("⠀⠀⠀⢣⡨⠿⠉⠀⠀⠀⠀⣀⣈⠉⠁⠀⠀⠀⠀⢿⡃⢸⣿⣿⣿⣿⣿⣿⠋⠉⠀⠈⠾⠁⠀⠀\n");
+    screenGotoxy(15, 27);
+    printf("⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⡿⠷⠖⠀⠀⠀⠀⢻⣿⣿⣿⣭⣿⣻⣿⣿⣶⡤⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 28);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣯⣇⠀⠀⠀⠀⣀⠀⠀⢸⣿⠇⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 29);
+    printf("⠀⠀⠀⠀⠀⠀⠀⢀⠀⠈⠘⣿⣿⣶⣦⣄⣉⠳⠤⣿⣾⣿⣿⣿⠿⣿⡿⢫⡆⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 30);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠘⣆⠀⠀⠸⣿⡄⠈⠙⠛⠟⢿⠿⠏⠛⠉⠀⢠⣿⠁⡾⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 31);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠸⣄⠀⠀⠹⣿⡓⠲⠤⠀⠀⢀⡤⠴⠞⣻⣿⠃⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 32);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠢⠀⠀⠹⣷⣄⡀⡀⣀⢠⢠⣶⣷⡿⠃⠀⢀⢰⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 33);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡆⠈⢆⠀⠈⢿⣿⣶⣾⣿⣿⣿⡿⠀⠀⢀⡏⢸⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 34);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣧⠀⠘⣆⠀⢀⡈⣻⣿⣿⣿⣷⣦⡀⠀⣾⠇⣼⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 35);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠘⣆⠀⠙⠛⠛⣻⠿⣿⣿⠇⣼⡟⣲⠋⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 36);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠘⢦⣀⣀⣴⣧⣴⣿⣟⣼⣿⡷⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 37);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⢦⣈⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
+    screenGotoxy(15, 38);
+    printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣟⡛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+
+    // Mensagem logo abaixo do desenho, na linha 39
+    screenGotoxy(15, 39);
+    printf("HAHAHA! RESOLVA MEUS ENIGMAS!");
+    screenGotoxy(15, 40);
+    printf("Pressione ENTER para continuar...");
+    
+    while (readch() != '\n'); // Espera Enter
 }
 
-void screenBoxDisable() {
-    printf("%s%s", ESC, BOX_DISABLE);
-}
+void screenUpdate(void)    { fflush(stdout); }
+void screenSetNormal(void) { printf(ESC NORMALTEXT); }
+void screenSetBold(void)   { printf(ESC BOLDTEXT); }
+void screenSetBlink(void)  { printf(ESC BLINKTEXT); }
+void screenSetReverse(void){ printf(ESC REVERSETEXT); }
+void screenBoxEnable(void) { printf(ESC BOX_ENABLE); }
+void screenBoxDisable(void){ printf(ESC BOX_DISABLE); }
+void screenHomeCursor(void){ printf(ESC HOMECURSOR); }
+void screenHideCursor(void){ printf(ESC HIDECURSOR); }
+void screenShowCursor(void){ printf(ESC SHOWCURSOR); }
+
