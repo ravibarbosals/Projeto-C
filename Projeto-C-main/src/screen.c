@@ -18,12 +18,7 @@ void screenClear() {
 void screenDrawBorders(void) {
     setlocale(LC_ALL, "");
     screenClear();
-<<<<<<< HEAD
     screenBoxEnable();           
-=======
-    screenBoxEnable();           // ativa modo pedro
-    
->>>>>>> f04ca9db4f11dd3c6e0375425d3ef949e72f6ec5
 
     screenGotoxy(MINX, MINY);
     putchar(BOX_UPLEFT);
@@ -255,7 +250,6 @@ void screenHomeCursor(void){ printf(ESC HOMECURSOR); }
 void screenHideCursor(void){ printf(ESC HIDECURSOR); }
 void screenShowCursor(void){ printf(ESC SHOWCURSOR); }
 
-// Função utilitária para deixar o texto em branco (ANSI)
 void setTextoBranco() {
     printf("\033[1;97m");
 }
@@ -264,11 +258,4 @@ void setTextoVerde(){
     printf("\033[32m");
 }
 
-// Exemplo de uso: chame setTextoBranco() antes de imprimir textos que devem ficar em branco.
-// Por exemplo, no seu main.c, antes de printf dos menus ou textos principais:
-//
-// setTextoBranco();
-// printf("Seu texto aqui\n");
-//
-// Não chame antes de desenhar bordas ou fundo, apenas antes dos textos que você quer em branco.
 
