@@ -497,24 +497,27 @@ int fazerPerguntaLogica() {
     printf("Considere a seguinte charada:");
     screenGotoxy(10, 8);
     setTextoBranco();
-    printf("\"Se o Cavaleiro das Trevas decifrar minha pista enigmática,");
+    printf("\"Se o morcego invadir meu mundo codificado,");
     screenGotoxy(10, 9);
     setTextoBranco();
-    printf("então o jogo termina com a minha captura.\"");
+    printf("meus segredos serão todos revelados.\"");
     screenGotoxy(10, 11);
     setTextoBranco();
-    printf("Qual é o valor lógico desta proposição?");
+    printf("Mas será que a lógica não mente?");
     screenGotoxy(10, 12);
     setTextoBranco();
-    printf("1. Verdadeiro");
+    printf("Qual o valor dessa ideia presente?");
     screenGotoxy(10, 13);
     setTextoBranco();
-    printf("2. Falso");
+    printf("1. Verdadeiro");
     screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("2. Falso");
+    screenGotoxy(10, 15);
     setTextoBranco();
     printf("3. Indeterminado");
     
-    screenGotoxy(10, 15);
+    screenGotoxy(10, 16);
     setTextoBranco();
     printf("Sua resposta (1-3): ");
     
