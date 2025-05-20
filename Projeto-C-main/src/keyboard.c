@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
-#include <sys/select.h>  // Para fd_set, FD_*, select()
-#include <sys/time.h>    // Para struct timeval
+#include <sys/select.h>  
+#include <sys/time.h>    
 #include "keyboard.h"
 
 static struct termios oldt, newt;

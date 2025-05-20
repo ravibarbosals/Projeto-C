@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <stdio.h>    // Adicionado para printf
+#include <stdio.h>    
 #include <time.h>
 #include "screen.h"
 #include "keyboard.h"
@@ -7,13 +7,13 @@
 #include "jogo.h"
 
 int main() {
-    // Inicialização
+
     screenInit(1);
     keyboardInit();
     
     int ch;
     while(1) {
-        printf("\033[32m"); // Código ANSI para texto verde
+        printf("\033[32m");
         screenClear();
         screenGotoxy(1, 1);
         printf("=== CODE RIDDLER ===");
@@ -31,10 +31,10 @@ int main() {
         printf("Escolha uma opção: ");
         fflush(stdout);
 
-        while(!keyhit()); // Espera até que uma tecla seja pressionada
+        while(!keyhit());
         ch = readch();
         
-        // Processa a escolha
+        
         switch(ch) {
             case '1':
                 executarJogo();

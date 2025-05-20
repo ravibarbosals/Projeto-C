@@ -4,10 +4,9 @@
 #include "keyboard.h"
 #include <string.h>
 
-// Adicione o protótipo da função antes de qualquer uso
 void preencherFundoEntreBordasComTitle(void);
 
-/* Limpa toda a tela e leva cursor a 1,1 */
+
 void screenClear() {
     printf("%s%s", ESC, CLEARSCREEN);
     fflush(stdout);
@@ -15,26 +14,27 @@ void screenClear() {
 
 
 
-/* Desenha as bordas da janela */
+
 void screenDrawBorders(void) {
     setlocale(LC_ALL, "");
     screenClear();
-    screenBoxEnable();           // ativa modo box-drawing
+<<<<<<< HEAD
+    screenBoxEnable();           
+=======
+    screenBoxEnable();           // ativa modo pedro
+    
+>>>>>>> f04ca9db4f11dd3c6e0375425d3ef949e72f6ec5
 
-    // canto superior esquerdo
     screenGotoxy(MINX, MINY);
     putchar(BOX_UPLEFT);
 
-    // borda superior
     for (int x = MINX + 1; x < MAXX; x++) {
         screenGotoxy(x, MINY);
         putchar(BOX_HLINE);
     }
-    // canto superior direito
     screenGotoxy(MAXX, MINY);
     putchar(BOX_UPRIGHT);
 
-    // laterais
     for (int y = MINY + 1; y < MAXY; y++) {
         screenGotoxy(MINX, y);
         putchar(BOX_VLINE);
@@ -42,24 +42,19 @@ void screenDrawBorders(void) {
         putchar(BOX_VLINE);
     }
 
-    // canto inferior esquerdo
     screenGotoxy(MINX, MAXY);
     putchar(BOX_DWNLEFT);
-    // borda inferior
     for (int x = MINX + 1; x < MAXX; x++) {
         screenGotoxy(x, MAXY);
         putchar(BOX_HLINE);
     }
-    // canto inferior direito
     screenGotoxy(MAXX, MAXY);
     putchar(BOX_DWNRIGHT);
 
     screenBoxDisable();    
-    // Mostra o fundo entre as bordas
     preencherFundoEntreBordasComTitle();
 }
 
-/* Inicializa a tela: limpa, desenha bordas (se solicitado), move cursor e esconde */
 void screenInit(int drawBorders) {
     screenClear();
     if (drawBorders) screenDrawBorders();
@@ -67,115 +62,148 @@ void screenInit(int drawBorders) {
     screenHideCursor();
 }
 
-/* Restaura cores, limpa e mostra cursor */
 void screenDestroy(void) {
-    printf(ESC NORMALTEXT);      // reseta atributos
+    printf(ESC NORMALTEXT);      
     screenClear();
     screenHomeCursor();
     screenShowCursor();
 }
 
-/* Move cursor ANSI para linha=y coluna=x */
 void screenGotoxy(int x, int y) {
     printf("%s[%d;%dH", ESC, y, x);
     fflush(stdout);
 }
-/* Define cores de primeiro-plano e fundo */
 void screenSetColor(screenColor fg, screenColor bg) {
     char seq[20];
     int bright = 0;
     if (fg > LIGHTGRAY) { bright = 1; fg -= 8; }
-    // formata: ESC [<bright>;<fg+30>;<bg+40>m
     snprintf(seq, sizeof(seq), ESC "[%d;%d;%dm", bright, fg + 30, bg + 40);
     printf("%s", seq);
 }
 
 void desenharCharadaAscii() {
-    // Não define cor aqui!
     screenClear();
 
     screenGotoxy(15, 2);
+    setTextoVerde();
     printf("⠀               ⢀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 3);
+    setTextoVerde();
     printf("⠀⠀⠀⠀  ⠀   ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀  ⠀ \n");
     screenGotoxy(15, 4);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀  ⠀⢀⠙⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 5);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀  ⠀⣷⣶⣤⣄⣈⣉⣉⣉⣉⣉⣉⣉⣁⣤⡄⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 6);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 7);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀  ⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 8);
+    setTextoVerde();
     printf("⠀⠀⠀⠀  ⠀⠀⢀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 9);
+    setTextoVerde();
     printf("⠀⠀   ⢀⣠⣶⣾⡏⢀⡈⠛⠻⠿⢿⣿⣿⣿⣿⣿⠿⠿⠟⠛⢀⠀⢶⣤⣀⠀⠀⠀\n");
     screenGotoxy(15, 10);
+    setTextoVerde();
     printf("   ⠀⢠⣿⣿⣿⣿⡇⠸⣿⣿⣶⣶⣤⣤⣤⣤⣤⣤⣤⣶⣶⣿⡿⠂⣸⣿⣿⣷⡄⠀\n");
     screenGotoxy(15, 11);
+    setTextoVerde();
     printf("  ⠀ ⢸⣿⣿⣿⣿⣿⣦⣄⡉⠛⠛⠛⠿⠿⠿⠿⠛⠛⠛⢉⣁⣤⣾⣿⣿⣿⣿⡷⠀\n");
     screenGotoxy(15, 12);
+    setTextoVerde();
     printf("⠀⠀  ⠙⢿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣶⣶⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀\n");
     screenGotoxy(15, 13);
+    setTextoVerde();
     printf("⠀⠀⠀  ⠀⠈⠙⠛⠿⠿⢿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠛⠛⠉⠁⠀⠀⠀⠀\n");
     screenGotoxy(15, 14);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣷⡍⠻⢷⠿⢿⠿⢧⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣆⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 15);
+    setTextoVerde();
     printf("⠀⠀⠀⣀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣆⣰⣶⣆⣀⣾⣿⣿⣿⣿⣿⣿⣿⡿⠿⣥⣾⣿⡀⠀⠀⠀⠀\n");
     screenGotoxy(15, 16);
+    setTextoVerde();
     printf("⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠘⠻⣿⣿⣿⣦⡀⠀⠀\n");
     screenGotoxy(15, 17);
+    setTextoVerde();
     printf("⠀⠿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠻⣿⣿⣿⣿⣿⣿⣿⣏⣡⣼⣿⣦⣄⠘⢿⣿⣿⣿⣿⡄⠀\n");
     screenGotoxy(15, 18);
-    printf("⠀⣬⣿⣃⢨⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣿⣿⡷⠀\n");
+    setTextoVerde();
+    printf("⠀⣬⣿⣃⢨⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣿⣿⡷⠀\n");
     screenGotoxy(15, 19);
+    setTextoVerde();
     printf("⠀⠹⣿⣽⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⡿⠛⠉⠉⠙⢿⣿⣿⣿⠁⠀\n");
     screenGotoxy(15, 20);
+    setTextoVerde();
     printf("⠀⠀⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣽⣿⣿⣿⣇⠀⠀⠀⠀⢸⣿⣿⣿⠂⠀\n");
     screenGotoxy(15, 21);
+    setTextoVerde();
     printf("⠀⠀⢹⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢲⣿⣿⣿⣿⣿⣿⣿⣶⠦⠀⣼⣿⣿⣿⣀⡀\n");
     screenGotoxy(15, 22);
+    setTextoVerde();
     printf("⠀⢰⣧⣼⣿⣿⣿⠃⠀⢀⣠⡀⠀⠀⠀⠀⠀⠀⣆⢸⣿⣿⣿⣿⣿⠿⣷⣶⣶⡄⠈⣿⣿⣿⣸⣿\n");
     screenGotoxy(15, 23);
+    setTextoVerde();
     printf("⠀⠘⣿⣿⡞⣿⡏⠀⠚⠛⠉⠙⣧⡀⠀⠀⠈⣦⣻⣾⣿⣿⣻⣿⢏⡴⠋⠁⠀⠀⠀⣿⣿⣿⣿⡿\n");
     screenGotoxy(15, 24);
+    setTextoVerde();
     printf("⠀⠀⠙⢠⣷⢿⣧⠀⠀⢲⣿⣶⣿⣿⣦⡀⢀⣾⣿⣿⣿⣯⣟⣷⣯⣷⣶⣶⣾⣿⣦⣿⡏⣿⡔⠁\n");
     screenGotoxy(15, 25);
+    setTextoVerde();
     printf("⠀⠀⢠⡼⣧⠘⡏⠀⠀⠀⠁⢹⣂⣤⣼⡿⢻⡟⠻⣿⣿⣿⣿⣹⠯⠖⣁⣿⣿⣿⠛⢻⢃⣿⠷⠀\n");
     screenGotoxy(15, 26);
+    setTextoVerde();
     printf("⠀⠀⠀⢣⡨⠿⠉⠀⠀⠀⠀⣀⣈⠉⠁⠀⠀⠀⠀⢿⡃⢸⣿⣿⣿⣿⣿⣿⠋⠉⠀⠈⠾⠁⠀⠀\n");
     screenGotoxy(15, 27);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⡿⠷⠖⠀⠀⠀⠀⢻⣿⣿⣿⣭⣿⣻⣿⣿⣶⡤⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 28);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣯⣇⠀⠀⠀⠀⣀⠀⠀⢸⣿⠇⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 29);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⢀⠀⠈⠘⣿⣿⣶⣦⣄⣉⠳⠤⣿⣾⣿⣿⣿⠿⣿⡿⢫⡆⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 30);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠘⣆⠀⠀⠸⣿⡄⠈⠙⠛⠟⢿⠿⠏⠛⠉⠀⢠⣿⠁⡾⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 31);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠸⣄⠀⠀⠹⣿⡓⠲⠤⠀⠀⢀⡤⠴⠞⣻⣿⠃⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 32);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠢⠀⠀⠹⣷⣄⡀⡀⣀⢠⢠⣶⣷⡿⠃⠀⢀⢰⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 33);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡆⠈⢆⠀⠈⢿⣿⣶⣾⣿⣿⣿⡿⠀⠀⢀⡏⢸⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 34);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣧⠀⠘⣆⠀⢀⡈⣻⣿⣿⣿⣷⣦⡀⠀⣾⠇⣼⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 35);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠘⣆⠀⠙⠛⠛⣻⠿⣿⣿⠇⣼⡟⣲⠋⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 36);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠘⢦⣀⣀⣴⣧⣴⣿⣟⣼⣿⡷⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 37);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⢦⣈⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
     screenGotoxy(15, 38);
+    setTextoVerde();
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣟⡛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
 
-    // Mensagem logo abaixo do desenho, na linha 39
     screenGotoxy(15, 39);
+    setTextoVerde();
     printf("HAHAHA! RESOLVA MEUS ENIGMAS!");
     screenGotoxy(15, 40);
+    setTextoVerde();
     printf("Pressione ENTER para continuar...");
     
-    while (readch() != '\n'); // Espera Enter
+    while (readch() != '\n'); 
 }
 
 const char *title[] = {
@@ -197,6 +225,7 @@ const char *title[] = {
 };
 
 void preencherFundoEntreBordasComTitle() {
+    setTextoVerde();
     int num_lines = sizeof(title) / sizeof(title[0]);
     int y_idx = 0;
     for (int y = MINY + 1; y < MAXY; y++) {
@@ -226,5 +255,20 @@ void screenHomeCursor(void){ printf(ESC HOMECURSOR); }
 void screenHideCursor(void){ printf(ESC HIDECURSOR); }
 void screenShowCursor(void){ printf(ESC SHOWCURSOR); }
 
-;
+// Função utilitária para deixar o texto em branco (ANSI)
+void setTextoBranco() {
+    printf("\033[1;97m");
+}
+
+void setTextoVerde(){
+    printf("\033[32m");
+}
+
+// Exemplo de uso: chame setTextoBranco() antes de imprimir textos que devem ficar em branco.
+// Por exemplo, no seu main.c, antes de printf dos menus ou textos principais:
+//
+// setTextoBranco();
+// printf("Seu texto aqui\n");
+//
+// Não chame antes de desenhar bordas ou fundo, apenas antes dos textos que você quer em branco.
 
