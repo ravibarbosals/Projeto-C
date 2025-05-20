@@ -18,12 +18,16 @@ int main() {
         screenGotoxy(1, 1);
         printf("=== CODE RIDDLER ===");
         screenGotoxy(1, 3);
+        setTextoBranco();
         printf("1. Iniciar Jogo");
         screenGotoxy(1, 4);
+        setTextoBranco();
         printf("2. Ver Ranking");
         screenGotoxy(1, 5);
+        setTextoBranco();
         printf("3. Sair");
         screenGotoxy(1, 7);
+        setTextoVerde();
         printf("Escolha uma opção: ");
         fflush(stdout);
 
