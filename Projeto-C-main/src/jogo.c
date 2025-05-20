@@ -587,6 +587,18 @@ void jogarFase(Jogo *jogo) {
     }
 }
 
+void feedbackDerrota() {
+    screenClear();
+    screenInit(1);
+    screenGotoxy(20, 10);
+    setTextoBranco();
+    printf("HAHAHA, você perdeu!!!");
+    screenGotoxy(20, 12);
+    setTextoBranco();
+    printf("Pressione ENTER para continuar...");
+    while (readch() != '\n');
+}
+
 void jogarFaseComPergunta(Jogo *jogo) {
     jogarFase(jogo);
     
@@ -606,6 +618,7 @@ void jogarFaseComPergunta(Jogo *jogo) {
             screenGotoxy(20, 17 + jogo->tentativas * 4);
             setTextoBranco();
             printf("Resposta errada! Fim de jogo.");
+            feedbackDerrota();
         }
     }
 }
@@ -694,7 +707,8 @@ void executarJogo() {
     if (!fase1.acertou) {
         screenGotoxy(20, 20);
         setTextoBranco();
-        printf("Fim de jogo! Você não completou a fase 1.");
+        
+        feedbackDerrota();
         return;
     }
     feedbackCharadaFase(1);
@@ -707,7 +721,8 @@ void executarJogo() {
     if (!fase2.acertou) {
         screenGotoxy(20, 20);
         setTextoBranco();
-        printf("Fim de jogo! Você não completou a fase 2.");
+        
+        feedbackDerrota();
         return;
     }
     feedbackCharadaFase(2);
@@ -720,7 +735,8 @@ void executarJogo() {
     if (!fase3.acertou) {
         screenGotoxy(20, 20);
         setTextoBranco();
-        printf("Fim de jogo! Você não completou a fase 3.");
+        
+        feedbackDerrota();
         return;
     }
     feedbackCharadaFase(3);
@@ -733,7 +749,8 @@ void executarJogo() {
     if (!fase4.acertou) {
         screenGotoxy(20, 20);
         setTextoBranco();
-        printf("Fim de jogo! Você não completou a fase 4.");
+        
+        feedbackDerrota();
         return;
     }
     feedbackCharadaFase(4);
@@ -752,6 +769,7 @@ void executarJogo() {
     } else {
         screenGotoxy(20, 20);
         setTextoBranco();
-        printf("Fim de jogo! Você não completou a fase 5.");
+        
+        feedbackDerrota();
     }
 }
