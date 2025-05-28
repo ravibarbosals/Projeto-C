@@ -483,6 +483,8 @@ int lerNumero() {
     return numero;
 }
 
+
+
 int fazerPerguntaLogica() {
     int resposta;
     char ch;  
@@ -531,6 +533,221 @@ int fazerPerguntaLogica() {
     }
     
     return (resposta == 1); 
+}
+
+int fazerPerguntaLogica1() {
+    int resposta;
+    char ch;
+
+    screenClear();
+    screenGotoxy(20, 5);
+    setTextoBranco();
+    printf("=== PERGUNTA DE LÓGICA 1 ===");
+
+    screenGotoxy(10, 7);
+    setTextoBranco();
+    printf("Charada:");
+    screenGotoxy(10, 8);
+    setTextoBranco();
+    printf("\"Se o Batman está entre as sombras e sob a lua,");
+    screenGotoxy(10, 9);
+    setTextoBranco();
+    printf("ele está acima do medo ou abaixo da coragem?\"");
+    screenGotoxy(10, 11);
+    setTextoBranco();
+    printf("1. Acima do medo");
+    screenGotoxy(10, 12);
+    setTextoBranco();
+    printf("2. Abaixo da coragem");
+    screenGotoxy(10, 13);
+    setTextoBranco();
+    printf("3. Entre ambos");
+
+    screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("Sua resposta (1-3): ");
+
+    while (1) {
+        ch = readch();
+        if (ch >= '1' && ch <= '3') {
+            resposta = ch - '0';
+            printf("%c", ch);
+            break;
+        }
+    }
+    return (resposta == 3); // Resposta correta: Entre ambos
+}
+
+int fazerPerguntaLogica2() {
+    int resposta;
+    char ch;
+
+    screenClear();
+    screenGotoxy(20, 5);
+    setTextoBranco();
+    printf("=== PERGUNTA DE LÓGICA 2 ===");
+
+    screenGotoxy(10, 7);
+    setTextoBranco();
+    printf("Charada:");
+    screenGotoxy(10, 8);
+    setTextoBranco();
+    printf("\"Quando o Batman está diante do perigo,");
+    screenGotoxy(10, 9);
+    setTextoBranco();
+    printf("ele age com ou sem hesitação?\"");
+    screenGotoxy(10, 11);
+    setTextoBranco();
+    printf("1. Com hesitação");
+    screenGotoxy(10, 12);
+    setTextoBranco();
+    printf("2. Sem hesitação");
+    screenGotoxy(10, 13);
+    setTextoBranco();
+    printf("3. Depende do inimigo");
+
+    screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("Sua resposta (1-3): ");
+
+    while (1) {
+        ch = readch();
+        if (ch >= '1' && ch <= '3') {
+            resposta = ch - '0';
+            printf("%c", ch);
+            break;
+        }
+    }
+    return (resposta == 2); // Resposta correta: Sem hesitação
+}
+
+int fazerPerguntaLogica3() {
+    int resposta;
+    char ch;
+
+    screenClear();
+    screenGotoxy(20, 5);
+    setTextoBranco();
+    printf("=== PERGUNTA DE LÓGICA 3 ===");
+
+    screenGotoxy(10, 7);
+    setTextoBranco();
+    printf("Charada:");
+    screenGotoxy(10, 8);
+    setTextoBranco();
+    printf("\"Se o Bat-sinal aparece sobre Gotham,");
+    screenGotoxy(10, 9);
+    setTextoBranco();
+    printf("o Batman está dentro ou fora da caverna?\"");
+    screenGotoxy(10, 11);
+    setTextoBranco();
+    printf("1. Dentro da caverna");
+    screenGotoxy(10, 12);
+    setTextoBranco();
+    printf("2. Fora da caverna");
+    screenGotoxy(10, 13);
+    setTextoBranco();
+    printf("3. Em ambos os lugares");
+
+    screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("Sua resposta (1-3): ");
+
+    while (1) {
+        ch = readch();
+        if (ch >= '1' && ch <= '3') {
+            resposta = ch - '0';
+            printf("%c", ch);
+            break;
+        }
+    }
+    return (resposta == 2); // Resposta correta: Fora da caverna
+}
+
+int fazerPerguntaLogica4() {
+    int resposta;
+    char ch;
+
+    screenClear();
+    screenGotoxy(20, 5);
+    setTextoBranco();
+    printf("=== PERGUNTA DE LÓGICA 4 ===");
+
+    screenGotoxy(10, 7);
+    setTextoBranco();
+    printf("Charada:");
+    screenGotoxy(10, 8);
+    setTextoBranco();
+    printf("\"O Coringa está atrás do Batman,");
+    screenGotoxy(10, 9);
+    setTextoBranco();
+    printf("mas o Batman está à frente do medo. Quem está no meio?\"");
+    screenGotoxy(10, 11);
+    setTextoBranco();
+    printf("1. O medo");
+    screenGotoxy(10, 12);
+    setTextoBranco();
+    printf("2. O Batman");
+    screenGotoxy(10, 13);
+    setTextoBranco();
+    printf("3. O Coringa");
+
+    screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("Sua resposta (1-3): ");
+
+    while (1) {
+        ch = readch();
+        if (ch >= '1' && ch <= '3') {
+            resposta = ch - '0';
+            printf("%c", ch);
+            break;
+        }
+    }
+    return (resposta == 2); // Resposta correta: O Batman
+}
+
+int fazerPerguntaLogica5() {
+    int resposta;
+    char ch;
+
+    screenClear();
+    screenGotoxy(20, 5);
+    setTextoBranco();
+    printf("=== PERGUNTA DE LÓGICA 5 ===");
+
+    screenGotoxy(10, 7);
+    setTextoBranco();
+    printf("Charada:");
+    screenGotoxy(10, 8);
+    setTextoBranco();
+    printf("\"Se Robin está ao lado do Batman e o Alfred está atrás,");
+    screenGotoxy(10, 9);
+    setTextoBranco();
+    printf("quem está à frente da justiça?\"");
+    screenGotoxy(10, 11);
+    setTextoBranco();
+    printf("1. O Batman");
+    screenGotoxy(10, 12);
+    setTextoBranco();
+    printf("2. O Robin");
+    screenGotoxy(10, 13);
+    setTextoBranco();
+    printf("3. O Alfred");
+
+    screenGotoxy(10, 14);
+    setTextoBranco();
+    printf("Sua resposta (1-3): ");
+
+    while (1) {
+        ch = readch();
+        if (ch >= '1' && ch <= '3') {
+            resposta = ch - '0';
+            printf("%c", ch);
+            break;
+        }
+    }
+    return (resposta == 1); // Resposta correta: O Batman
 }
 
 void jogarFase(Jogo *jogo) {
@@ -714,6 +931,7 @@ void executarJogo() {
         feedbackDerrota();
         return;
     }
+    fazerPerguntaLogica1();
     feedbackCharadaFase(1);
 
   
@@ -728,6 +946,7 @@ void executarJogo() {
         feedbackDerrota();
         return;
     }
+    fazerPerguntaLogica2();
     feedbackCharadaFase(2);
 
   
@@ -742,6 +961,7 @@ void executarJogo() {
         feedbackDerrota();
         return;
     }
+    fazerPerguntaLogica3();
     feedbackCharadaFase(3);
 
 
@@ -756,6 +976,7 @@ void executarJogo() {
         feedbackDerrota();
         return;
     }
+    fazerPerguntaLogica4();
     feedbackCharadaFase(4);
 
     
@@ -768,6 +989,7 @@ void executarJogo() {
         setTextoBranco();
         printf("PARABÉNS! Você completou todas as 5 fases em %d tentativas!", tentativasTotais);
         adicionarAoRanking(nome, tentativasTotais);
+        fazerPerguntaLogica5();
         mostrarRanking();
     } else {
         screenGotoxy(20, 20);
