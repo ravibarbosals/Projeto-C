@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-#include <windows.h> // Necessário para Windows
+#include <windows.h> /
 #else
 #include <sys/time.h> // Necessário para Unix-like
 #endif
